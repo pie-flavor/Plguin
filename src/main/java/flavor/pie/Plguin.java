@@ -73,6 +73,7 @@ public class Plguin {
         if (root.getNode("lockable-chests").getBoolean(false)) manager.registerListener(this, InteractBlockEvent.Secondary.class, Order.LATE, this::lockChest);
         if (root.getNode("flaming-creepers").getBoolean(false)) manager.registerListener(this, DamageEntityEvent.class, this::flamingCreepers);
         if (root.getNode("break-double-chests").getBoolean(false)) manager.registerListener(this, ChangeBlockEvent.Break.class, this::breakDoubleChests);
+        
         toLock = new ArrayList<>();
     }
     private void disable() {
@@ -184,7 +185,7 @@ public class Plguin {
             List<Transaction<BlockSnapshot>> list = e.getTransactions();
             for (Transaction<BlockSnapshot> transaction : list) {
                 BlockSnapshot snapshot = transaction.getOriginal();
-                if (snapshot.supports(Keys.CONNECTED_DIRECTIONS)) {
+                if (snapshot.getState().getType().equals(BlockTypes.CHEST) || snapshot.getState().getType().equals(BlockTypes.TRAPPED_CHEST)) {
                     Optional<Set<Direction>> set_ = snapshot.get(Keys.CONNECTED_DIRECTIONS);
                     if (set_.isPresent()) {
                         Set<Direction> set = set_.get();
