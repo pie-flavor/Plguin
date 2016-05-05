@@ -19,6 +19,7 @@ import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.monster.Creeper;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.Snowball;
 import org.spongepowered.api.entity.weather.Lightning;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
@@ -28,6 +29,7 @@ import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.item.inventory.DropItemEvent;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
@@ -75,6 +77,7 @@ public class Plguin {
         if (root.getNode("flaming-creepers").getBoolean(false)) manager.registerListener(this, DamageEntityEvent.class, this::flamingCreepers);
         if (root.getNode("break-double-chests").getBoolean(false)) manager.registerListener(this, ChangeBlockEvent.Break.class, this::breakDoubleChests);
         if (root.getNode("shear-tall-grass").getBoolean(false)) manager.registerListener(this, InteractBlockEvent.Secondary.class, this::shearTallGrass);
+        if (root.getNode("snow-extinguisher").getBoolean(false)) manager.registerListener(this, DestructEntityEvent.class, this::snowExtinguisher);
         toLock = new ArrayList<>();
     }
     private void disable() {
@@ -223,6 +226,16 @@ public class Plguin {
                         }
                     }
                 }
+            }
+        }
+    }
+    void snowExtinguisher(DestructEntityEvent e) {
+        Entity entity = e.getTargetEntity();
+        if (entity instanceof Snowball) {
+            Snowball snowball = ((Snowball) entity);
+            Location<World> location = snowball.getLocation();
+            if (location.getBlockType().equals(BlockTypes.FIRE)) {
+                location.setBlockType(BlockTypes.AIR);
             }
         }
     }
