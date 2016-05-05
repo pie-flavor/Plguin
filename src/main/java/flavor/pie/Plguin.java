@@ -7,6 +7,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.block.BlockSnapshot;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.data.Transaction;
@@ -25,6 +26,7 @@ import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
+import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
@@ -77,7 +79,7 @@ public class Plguin {
         if (root.getNode("flaming-creepers").getBoolean(false)) manager.registerListener(this, DamageEntityEvent.class, this::flamingCreepers);
         if (root.getNode("break-double-chests").getBoolean(false)) manager.registerListener(this, ChangeBlockEvent.Break.class, this::breakDoubleChests);
         if (root.getNode("shear-tall-grass").getBoolean(false)) manager.registerListener(this, InteractBlockEvent.Secondary.class, this::shearTallGrass);
-        if (root.getNode("snow-extinguisher").getBoolean(false)) manager.registerListener(this, DestructEntityEvent.class, this::snowExtinguisher);
+        if (root.getNode("snow-extinguisher").getBoolean(false)) manager.registerListener(this, CollideBlockEvent.class, this::snowExtinguisher);
         toLock = new ArrayList<>();
     }
     private void disable() {
@@ -229,10 +231,10 @@ public class Plguin {
             }
         }
     }
-    void snowExtinguisher(DestructEntityEvent e) {
-        Entity entity = e.getTargetEntity();
-        if (entity instanceof Snowball) {
-            Snowball snowball = ((Snowball) entity);
+    void snowExtinguisher(CollideBlockEvent e) {
+        Optional<Snowball> snowball_ = e.getCause().first(Snowball.class);
+        if (snowball_.isPresent()) {
+            Snowball snowball = snowball_.get();
             Location<World> location = snowball.getLocation();
             if (location.getBlockType().equals(BlockTypes.FIRE)) {
                 location.setBlockType(BlockTypes.AIR);
