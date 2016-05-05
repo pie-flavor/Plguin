@@ -12,7 +12,8 @@ import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.meta.ItemEnchantment;
-import org.spongepowered.api.data.type.SkullTypes;
+import org.spongepowered.api.data.type.*;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.ArmorEquipable;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.monster.Creeper;
@@ -73,7 +74,7 @@ public class Plguin {
         if (root.getNode("lockable-chests").getBoolean(false)) manager.registerListener(this, InteractBlockEvent.Secondary.class, Order.LATE, this::lockChest);
         if (root.getNode("flaming-creepers").getBoolean(false)) manager.registerListener(this, DamageEntityEvent.class, this::flamingCreepers);
         if (root.getNode("break-double-chests").getBoolean(false)) manager.registerListener(this, ChangeBlockEvent.Break.class, this::breakDoubleChests);
-        
+        if (root.getNode("shear-tall-grass").getBoolean(false)) manager.registerListener(this, InteractBlockEvent.Secondary.class, this::shearTallGrass);
         toLock = new ArrayList<>();
     }
     private void disable() {
@@ -194,6 +195,31 @@ public class Plguin {
                             for (Direction direction : set) {
                                 location.setBlockType(BlockTypes.AIR, true);
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    void shearTallGrass(InteractBlockEvent.Secondary e) {
+        Optional<Player> p_ = e.getCause().first(Player.class);
+        if (p_.isPresent()) {
+            Player p = p_.get();
+            Optional<ItemStack> stack_ = p.getItemInHand();
+            if (stack_.isPresent()) {
+                ItemStack stack = stack_.get();
+                if (stack.getItem().equals(ItemTypes.SHEARS)) {
+                    BlockSnapshot snapshot = e.getTargetBlock();
+                    if (snapshot.getState().getType().equals(BlockTypes.DOUBLE_PLANT)) {
+                        Location<World> location = snapshot.getLocation().get();
+                        p.playSound(SoundTypes.SHEEP_SHEAR, location.getPosition(), 10.0);
+                        DoublePlantType type = snapshot.get(Keys.DOUBLE_PLANT_TYPE).get();
+                        if (type.equals(DoublePlantTypes.FERN)) {
+                            location.setBlockType(BlockTypes.TALLGRASS);
+                            location.offer(Keys.SHRUB_TYPE, ShrubTypes.TALL_GRASS);
+                        } else if (type.equals(DoublePlantTypes.FERN)) {
+                            location.setBlockType(BlockTypes.TALLGRASS);
+                            location.offer(Keys.SHRUB_TYPE, ShrubTypes.FERN);
                         }
                     }
                 }
