@@ -52,7 +52,6 @@ public class Plguin {
         shake = KeyFactory.makeSingleKey(Boolean.class, Value.class, DataQuery.of("shake"));
         injector = defaultInjector.createChildInjector(new AbstractModule(){
             public void configure() {
-                bind(Plguin.class).toInstance(Plguin.this);
                 bind(new TypeLiteral<Key<Value<Boolean>>>(){}).toInstance(shake);
             }
         });
