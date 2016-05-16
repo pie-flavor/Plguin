@@ -1,10 +1,9 @@
 plugins {
-    id 'org.spongepowered.plugin' version '0.5.1'
+    id 'org.spongepowered.plugin' version '0.5.2'
 }
 
-group 'flavor.pie'
-version '0.0.1-SNAPSHOT'
-description 'Random stuff I threw together.'
+group = 'flavor.pie'
+version = '1.0-SNAPSHOT'
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.0.0-SNAPSHOT'
