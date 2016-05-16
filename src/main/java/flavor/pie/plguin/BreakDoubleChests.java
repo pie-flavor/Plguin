@@ -30,7 +30,7 @@ public class BreakDoubleChests {
                         Location<World> location = snapshot.getLocation().get();
                         for (Direction direction : set) {
                             Location<World> relative = location.getRelative(direction);
-                            relative.getExtent().digBlockWith(relative.getBlockPosition(), p.getItemInHand().orElse(null), e.getCause());
+                            relative.setBlockType(BlockTypes.AIR);
                         }
                     }
                 }
