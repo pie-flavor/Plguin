@@ -9,6 +9,7 @@ import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.data.manipulator.immutable.common.AbstractImmutableBooleanData;
 import org.spongepowered.api.data.manipulator.mutable.common.AbstractBooleanData;
 import org.spongepowered.api.data.merge.MergeFunction;
+import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
 import org.spongepowered.api.data.value.mutable.Value;
 
@@ -77,31 +78,20 @@ public class ShakeData extends AbstractBooleanData<ShakeData, ShakeData.Immutabl
         }
 
     }
-    public static class ShakeDataBuilder implements DataManipulatorBuilder<ShakeData, ImmutableShakeData> {
+    public static class ShakeDataBuilder extends AbstractDataBuilder<ShakeData> {
         @Inject
         Key<Value<Boolean>> key;
-        @Override
-        public ShakeData create() {
-            return new ShakeData(false, key);
+        protected ShakeDataBuilder() {
+            super(ShakeData.class, 1);
         }
-
         @Override
-        public Optional<ShakeData> createFrom(DataHolder dataHolder) {
-            if (dataHolder.supports(key)) {
-                Optional<Boolean> bool_ = dataHolder.get(key);
-                return Optional.of(new ShakeData(bool_.orElse(false), key));
-            } else {
-                return Optional.empty();
-            }
-        }
-
-        @Override
-        public Optional<ShakeData> build(DataView container) throws InvalidDataException {
+        protected Optional<ShakeData> buildContent(DataView container) throws InvalidDataException {
             Optional<Boolean> bool_ = container.getBoolean(key.getQuery());
             if (bool_.isPresent()) {
                 return Optional.of(new ShakeData(bool_.get(), key));
-            } else
+            } else {
                 return Optional.empty();
+            }
         }
     }
 }
