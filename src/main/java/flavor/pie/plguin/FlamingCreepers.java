@@ -9,6 +9,7 @@ import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.Enchantments;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 public class FlamingCreepers {
     @Listener
-    public void flamingCreepers(DamageEntityEvent e, EntityDamageSource src) {
+    public void flamingCreepers(DamageEntityEvent e, @First EntityDamageSource src) {
         Entity entity = e.getTargetEntity();
         if (entity instanceof Creeper) {
             Creeper creeper = ((Creeper) entity);
