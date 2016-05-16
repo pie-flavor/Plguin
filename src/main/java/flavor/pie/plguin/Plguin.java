@@ -64,7 +64,7 @@ public class Plguin {
         if (root.getNode("break-double-chests").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.BreakDoubleChests")));
         if (root.getNode("shear-tall-grass").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.ShearTallGrass")));
         if (root.getNode("snow-extinguisher").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.UnderwaterPotion")));
-        if (root.getNode("shake-potions").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.ShakeData")));
+        if (root.getNode("shake-potions").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.ShakePotions")));
         loader.save(root);
     }
     private void disable() {
