@@ -31,7 +31,11 @@ public class FlamingCreepers {
                     List<ItemEnchantment> enchantments = item.get(Keys.ITEM_ENCHANTMENTS).get();
                     for (ItemEnchantment ench : enchantments) {
                         if (ench.getEnchantment().equals(Enchantments.FIRE_ASPECT)) {
-                            creeper.prime(e.getCause());
+                            if (creeper.isPrimed()) {
+                                creeper.detonate(e.getCause());
+                            } else {
+                                creeper.prime(e.getCause());
+                            }
                             return;
                         }
                     }
