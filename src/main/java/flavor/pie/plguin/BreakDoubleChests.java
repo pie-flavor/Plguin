@@ -64,7 +64,7 @@ public class BreakDoubleChests {
                             boolean cancelled = game.getEventManager().post(breakEvent);
                             if (!cancelled) {
                                 for (Transaction<BlockSnapshot> newTransaction: breakEvent.getTransactions()) {
-                                    newTransaction.getOriginal().getLocation().get().restoreSnapshot(newTransaction.getFinal(), true, true);
+                                    newTransaction.getOriginal().getLocation().get().setBlock(newTransaction.getFinal().getState());
                                 }
                             }
                             Task.builder().delayTicks(1).execute(() -> tracked.remove(location)).submit(plguin);
