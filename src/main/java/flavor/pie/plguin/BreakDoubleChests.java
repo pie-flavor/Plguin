@@ -77,6 +77,7 @@ public class BreakDoubleChests {
     }
     @Listener
     public void dropItems(DropItemEvent.Destruct e, @First BlockSpawnCause cause) {
+        if (e.getCause().contains(plguin)) return;
         Optional<Location<World>> loc_ = cause.getBlockSnapshot().getLocation();
         if (loc_.isPresent()) {
             Location<World> loc = loc_.get();
@@ -97,11 +98,11 @@ public class BreakDoubleChests {
                 ItemStack stack = ItemStack.builder().itemType(itemType).build();
                 Item item = (Item) relative.getExtent().createEntity(EntityTypes.ITEM, relative.getPosition()).get();
                 item.offer(Keys.REPRESENTED_ITEM, stack.createSnapshot());
-                DropItemEvent.Destruct newEvent = SpongeEventFactory.createDropItemEventDestruct(e.getCause(), Lists.newArrayList(item), relative.getExtent());
+                DropItemEvent.Destruct newEvent = SpongeEventFactory.createDropItemEventDestruct(Cause.builder().from(e.getCause()).named(NamedCause.of("Plugin", plguin)).build(), Lists.newArrayList(item), relative.getExtent());
                 boolean cancelled = game.getEventManager().post(newEvent);
                 if (!cancelled) {
                     for (Entity entity : newEvent.getEntities()) {
-                        newEvent.getTargetWorld().spawnEntity(entity, Cause.of(NamedCause.source(newCause)));
+                        newEvent.getTargetWorld().spawnEntity(entity, Cause.of(NamedCause.source(newCause), NamedCause.of("Plugin", plguin)));
                     }
                 }
             }
