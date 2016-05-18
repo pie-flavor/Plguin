@@ -3,6 +3,7 @@ package flavor.pie.plguin;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
@@ -37,7 +38,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class BreakDoubleChests {
-    Map<Location, Location> tracked = Maps.newHashMap();
+    Map<Location<World>, Pair<Location<World>, BlockType>> tracked = Maps.newHashMap();
     @Inject
     Plguin plguin;
     @Inject
@@ -55,7 +56,7 @@ public class BreakDoubleChests {
                         Location<World> location = snapshot.getLocation().get();
                         for (Direction direction : set) {
                             Location<World> relative = location.getRelative(direction);
-                            tracked.put(location, relative);
+                            tracked.put(location, Pair.of(relative, relative.getBlockType()));
                             BlockSnapshot originalSnapshot = relative.createSnapshot();
                             BlockState originalState = originalSnapshot.getState();
                             BlockState proposedState = BlockState.builder().from(originalState).blockType(BlockTypes.AIR).build();
@@ -80,10 +81,11 @@ public class BreakDoubleChests {
         if (loc_.isPresent()) {
             Location<World> loc = loc_.get();
             if (tracked.containsKey(loc)) {
-                Location<World> relative = tracked.get(loc);
+                Pair<Location<World>, BlockType> pair = tracked.get(loc);
+                Location<World> relative = pair.getLeft();
                 BlockSnapshot snapshot = relative.createSnapshot();
                 BlockSpawnCause newCause = BlockSpawnCause.builder().from(cause).block(snapshot).build();
-                BlockType blockType = cause.getBlockSnapshot().getState().getType();
+                BlockType blockType = pair.getRight();
                 ItemType itemType;
                 if (blockType.equals(BlockTypes.CHEST)) {
                     itemType = ItemTypes.CHEST;
