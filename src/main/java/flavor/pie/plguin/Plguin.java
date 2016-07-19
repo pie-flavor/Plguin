@@ -57,14 +57,14 @@ public class Plguin {
         });
         game.getDataManager().registerBuilder(ShakeData.class, injector.getInstance(ShakeData.ShakeDataBuilder.class));
         EventManager manager = game.getEventManager();
-        if (root.getNode("lightning-head").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.LightningHead")));
+        //TODO Unimplemented! if (root.getNode("lightning-head").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.LightningHead")));
         if (root.getNode("underwater-potion").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.UnderwaterPotion")));
         if (root.getNode("lockable-chests").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.LockChest")));
-        if (root.getNode("flaming-creepers").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.FlamingCreepers")));
+        //TODO Does not work! if (root.getNode("flaming-creepers").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.FlamingCreepers")));
         if (root.getNode("break-double-chests").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.BreakDoubleChests")));
         if (root.getNode("shear-tall-grass").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.ShearTallGrass")));
-        if (root.getNode("snow-extinguisher").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.UnderwaterPotion")));
-        if (root.getNode("shake-potions").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.ShakePotions")));
+        if (root.getNode("snow-extinguisher").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.SnowExtinguisher")));
+        //TODO Does not work! if (root.getNode("shake-potions").getBoolean(false)) manager.registerListeners(this, injector.getInstance(Class.forName("flavor.pie.plguin.ShakePotions")));
         loader.save(root);
     }
     private void disable() {

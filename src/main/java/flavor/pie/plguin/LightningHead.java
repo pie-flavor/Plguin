@@ -1,5 +1,7 @@
 package flavor.pie.plguin;
 
+import com.google.inject.Inject;
+import org.slf4j.Logger;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.entity.Entity;
@@ -17,8 +19,11 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import java.util.Optional;
 
 public class LightningHead {
+    @Inject
+    Logger logger;
     @Listener
     void lightningHead(DropItemEvent.Destruct e, @First EntityDamageSource src) {
+        logger.debug(e.toString()); //DEBUG
         Entity damager = src.getSource();
         if (damager instanceof Lightning) {
             Optional<Player> player_ = e.getCause().first(Player.class);

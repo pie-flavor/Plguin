@@ -6,6 +6,7 @@ import flavor.pie.plguin.data.ShakeData;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.sound.SoundTypes;
@@ -39,7 +40,7 @@ public class ShakePotions {
     Map<ItemStack, Integer> shakes = Maps.newHashMap();
     @Listener
     public void shakePotion(InteractBlockEvent.Primary e, @First Player p) {
-        Optional<ItemStack> stack_ = p.getItemInHand();
+        Optional<ItemStack> stack_ = p.getItemInHand(HandTypes.MAIN_HAND);
         if (stack_.isPresent()) {
             ItemStack stack = stack_.get();
             if (stack.getItem().equals(ItemTypes.POTION)) {

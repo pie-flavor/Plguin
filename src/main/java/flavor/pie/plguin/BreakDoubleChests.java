@@ -45,6 +45,7 @@ public class BreakDoubleChests {
     Game game;
     @Listener(order= Order.BEFORE_POST)
     public void breakDoubleChests(ChangeBlockEvent.Break e, @First Player p) {
+        if (p.get(Keys.IS_SNEAKING).get()) return;
         List<Transaction<BlockSnapshot>> list = e.getTransactions();
         for (Transaction<BlockSnapshot> transaction : list) {
             BlockSnapshot snapshot = transaction.getOriginal();
